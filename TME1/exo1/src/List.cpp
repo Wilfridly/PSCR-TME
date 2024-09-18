@@ -1,3 +1,4 @@
+#include "List.h" //FAUTE Oublie de l'include
 
 namespace pr {
 
@@ -9,15 +10,16 @@ size_t Chainon::length() {
 	if (next != nullptr) {
 		len += next->length();
 	}
-	return length();
+	return len; //FAUTE length() à la place de len
 }
 
-void Chainon::print (std::ostream & os) {
+void Chainon::print (std::ostream & os) const { //FAUTE Oublie de const
 	os << data ;
 	if (next != nullptr) {
 		os << ", ";
+		next->print(os); // FAUTE on remonte print(os) sinon il se fait tout le temps
 	}
-	next->print(os);
+	
 }
 
 // ******************  List
@@ -45,7 +47,7 @@ void List::push_front (const std::string& val) {
 	tete = new Chainon(val,tete);
 }
 
-bool empty() {
+bool List::empty() { //FAUTE Oublie de List::
 	return tete == nullptr;
 }
 
@@ -57,8 +59,6 @@ size_t List::size() const {
 	}
 }
 
-} // namespace pr
-
 std::ostream & operator<< (std::ostream & os, const pr::List & vec)
 {
 	os << "[";
@@ -67,5 +67,9 @@ std::ostream & operator<< (std::ostream & os, const pr::List & vec)
 	}
 	os << "]";
 	return os;
-}
+} //FAUTE Pas dans le namespace
+
+} // namespace pr
+
+
 
