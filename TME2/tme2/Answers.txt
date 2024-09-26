@@ -2,3 +2,4 @@ LYAUTEY Wilfrid M1 SESI 21310245 PSCR TME 2
 
 Q1) Il y a 566193 mots. 
 
+Q4) O(n^2)
