@@ -19,7 +19,11 @@ int main () {
 	string word;
 
 	std::vector<std::string> vect;
+	
+	std::vector<pair<std::string,int>> vectpair;
 	int count = 0;
+	int u = 1;
+	int p,count2 = 1;
 
 	// une regex qui reconnait les caractères anormaux (négation des lettres)
 	regex re( R"([^a-zA-Z])");
@@ -30,28 +34,26 @@ int main () {
 		transform(word.begin(),word.end(),word.begin(),::tolower);
 
 		// word est maintenant "tout propre"
-		if (nombre_lu % 100 == 0)
-			// on affiche un mot "propre" sur 100
-			cout << nombre_lu << ": "<< word << endl;
-		nombre_lu++;
+		// if (nombre_lu % 100 == 0)
+		// 	// on affiche un mot "propre" sur 100
+		// 	cout << nombre_lu << ": "<< word << endl;
+		// nombre_lu++;
 
 		vect.push_back(word); //Vecteur 1 avec tous les mots
 
-
-		// for(std::string i:vect){
-		// 	if(i == word){
-		// 		break;
-		// 	}
-		// 	vect.push_back(word);
-		// }
 	}
 	input.close();
 
 	sort(vect.begin(),vect.end());
 
 	for(auto i = 1; i < vect.size();i++){
-		if(vect[i] != vect[i -1]){
+		if(vect[i] != vect[i - 1]){
 			count ++;
+			vectpair.push_back(make_pair(vect[i-1],count2+1));
+			count2 = 0;	
+		}
+		else{
+			count2++;
 		}
 	}
 
@@ -64,7 +66,20 @@ int main () {
 
     cout << "Found a total of " << nombre_lu << " words." << endl;
 	cout << "Vecteur size : " << count << endl;
+	
+	for (auto p : vectpair) {
+		std::cout << "mot : " << p.first << ", qté: " << p.second << std::endl;
+    }
+	for (auto p : vectpair) {
+		if (p.first == "war"){
+			cout << "war a " << p.second << " occurence" << endl;
+		}
+		if (p.first == "peace"){
+			cout << "peace a " << p.second << " occurence" << endl;
+		}
+		if (p.first == "toto"){
+			cout << "toto a " << p.second << " occurence" << endl;
+		}
+	}
     return 0;
 }
-
-
