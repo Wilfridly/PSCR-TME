@@ -5,6 +5,7 @@
 #include <chrono>
 #include <vector>
 #include "hashmap.h"
+#include <cstdio>
 
 int main () {
 	using namespace std;
@@ -87,5 +88,6 @@ int main () {
 	}
 
 	cout << "La valeur de war est " << hashmap.get("war") << endl;
+	printf("%d \n",hashmap.get("war"));
     return 0;
 }
