@@ -1,3 +1,4 @@
+#pragma once
 #include <cstddef>
 #include <forward_list>
 #include <vector>
@@ -20,27 +21,27 @@ class Hashmap{
        size_t size;
 
     public:
-        Hashmap(size_t size = 21000):buckets(size),size(0){}
+        Hashmap(size_t size = 10):buckets(size),size(1){}
 
-        V* get(const K &key){
+        V * get(const K &key) {
             size_t h = std::hash<K>()(key);
             size_t target = h % buckets.size();
-
-            for(Entry &ent:buckets[target]){
-                if(ent.key==key){
+            for (Entry &ent:buckets[target]) {
+                if (ent.key == key) {
                     return &ent.value;
                 }
             }
             return nullptr;
         }
 
-        bool put(const K & key, const V & value){
+        bool put(const K & key, const V & value) {
             size_t h = std::hash<K>()(key);
             size_t target = h % buckets.size();
 
-            for(Entry &ent:buckets[target]){
+            for(Entry &ent:buckets[target]) {
                 if(ent.key==key){
-                    ent.value = ent.value + value;
+                    ent.value =ent.value + 1;
+                    // std::cout << "debug" << ent.value << std::endl;
                     return true;
                 }
             }

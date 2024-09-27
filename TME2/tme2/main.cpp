@@ -1,4 +1,3 @@
-#pragma once
 #include <iostream>
 #include <fstream>
 #include <regex>
@@ -86,8 +85,8 @@ int main () {
 			cout << "toto a " << p.second << " occurence" << endl;
 		}
 	}
-
-	cout << "La valeur de war est " << hashmap.get("war") << endl;
-	printf("%d \n",hashmap.get("war"));
+	int* a = hashmap.get("war");
+	cout << "La valeur de war est " << *a << endl;
+	// printf("%d \n",hashmap.get("war"));
     return 0;
 }
