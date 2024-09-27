@@ -103,28 +103,12 @@ int main () {
 			hashmapcopie.push_back({entry.key,entry.value});
 		}
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-	// for (const auto &bucket : hashmap.getbuckets()) {
-    //     // Parcourir chaque entrée dans la forward_list du bucket
-    //     for (const auto &entry : bucket) {
-    //         hashmapcopie.push_back({entry.key, entry.value});
-    //     }
-    // }
 	
-	for (auto &e : hashmapcopie) {
-		std::cout << e.first << ":" << e.second << endl;
+	sort(hashmapcopie.begin(),hashmapcopie.end(),[](pair<std::string,int> &a,pair<std::string,int> &b){ return a.second > b.second;});
+	int equal10 = 0;
+	for (auto it = hashmapcopie.begin(); (it < hashmapcopie.end() && equal10 < 100); ++it) {
+		std::cout << it->first << ":" << it->second << endl;
+		++equal10;
 	}
 
     return 0;
