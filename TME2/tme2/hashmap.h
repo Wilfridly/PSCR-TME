@@ -21,7 +21,7 @@ class Hashmap{
        size_t size;
 
     public:
-        Hashmap(size_t size = 10):buckets(size),size(1){}
+        Hashmap(size_t size = 21000):buckets(size),size(1){}
 
         V * get(const K &key) {
             size_t h = std::hash<K>()(key);
@@ -33,6 +33,8 @@ class Hashmap{
             }
             return nullptr;
         }
+
+
 
         bool put(const K & key, const V & value) {
             size_t h = std::hash<K>()(key);
@@ -53,5 +55,10 @@ class Hashmap{
         size_t getsize() const{
             return size;
         }
+
+        buckets_t getbuckets() const{
+            return buckets;
+        }
+        
     };
 }

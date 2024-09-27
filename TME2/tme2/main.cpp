@@ -85,8 +85,47 @@ int main () {
 			cout << "toto a " << p.second << " occurence" << endl;
 		}
 	}
-	int* a = hashmap.get("war");
-	cout << "La valeur de war est " << *a << endl;
-	// printf("%d \n",hashmap.get("war"));
+	int *a = hashmap.get("war");
+	int *b = hashmap.get("peace");
+	int *c = hashmap.get("toto");
+	
+	if((!c)){
+		cout << "Le nombre d'occurence de toto est 0" << endl;
+
+	}
+	cout << "Le nombre d'occurence de peace est " << *b << endl;
+	cout << "Le nombre d'occurence de war est " << *a << endl;
+
+	std::vector<pair<std::string,int>> hashmapcopie; //(hashmap.getbuckets() , hashmap.getbuckets().end());
+	
+	for(auto &bucket: hashmap.getbuckets()){
+		for(auto &entry: bucket){
+			hashmapcopie.push_back({entry.key,entry.value});
+		}
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+	// for (const auto &bucket : hashmap.getbuckets()) {
+    //     // Parcourir chaque entrée dans la forward_list du bucket
+    //     for (const auto &entry : bucket) {
+    //         hashmapcopie.push_back({entry.key, entry.value});
+    //     }
+    // }
+	
+	for (auto &e : hashmapcopie) {
+		std::cout << e.first << ":" << e.second << endl;
+	}
+
     return 0;
 }
