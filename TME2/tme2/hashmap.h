@@ -19,7 +19,9 @@ class Hashmap{
        typedef std::vector<std::forward_list<Entry>>buckets_t;
        buckets_t buckets;
        size_t size;
-
+       std::forward_list<Entry> iterend = buckets.end();
+       std::forward_list<Entry> vit = this->buckets;
+       Entry lit = this->buckets->Entry;
     public:
         Hashmap(size_t size = 21000):buckets(size),size(1){}
 

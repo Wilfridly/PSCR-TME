@@ -6,6 +6,24 @@
 #include "hashmap.h"
 #include <cstdio>
 
+template <typename iterator>
+size_t countp(iterator begin, iterator end){
+	size_t count = 0;
+	for(begin ; begin != end; begin++,count++);// for(;begin != end;begin++ , count++); 
+	return count;
+};
+
+template <typename iterator, typename T>
+size_t count_if_equal (iterator begin, iterator end, const T & val){
+	size_t count = 0;
+	for(begin; begin !=end; begin++){
+		if(*begin == val){
+			count++;
+		}
+	}
+	return count;
+}
+
 int main () {
 	using namespace std;
 	using namespace pr;
@@ -110,6 +128,10 @@ int main () {
 		std::cout << it->first << ":" << it->second << endl;
 		++equal10;
 	}
-
-    return 0;
+	std::string mote = "war";
+	size_t compteur = countp(vect.begin() , vect.end());
+	cout << compteur << endl;
+	size_t compteur2 = count_if_equal(vect.begin() , vect.end(), "war");
+    cout << compteur2 << endl;
+	return 0;
 }
