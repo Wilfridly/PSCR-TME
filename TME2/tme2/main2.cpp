@@ -4,6 +4,7 @@
 #include <chrono>
 #include <vector>
 #include <cstdio>
+#include <forward_list>
 #include <unordered_map>
 
 template <typename iterator>
@@ -38,10 +39,7 @@ int main () {
 	string word;
 
     std::unordered_map<std::string,int> hashmap;
-	// Hashmap<std::string,int> hashmap;
-
-	std::vector<std::string> vect;	
-	std::vector<pair<std::string,int>> vectpair;
+    std::unordered_map<int, forward_list<string>> hashmap2;
 
 	int count = 1;
 	int u = 1;
@@ -55,14 +53,14 @@ int main () {
 		// passe en lowercase
 		transform(word.begin(),word.end(),word.begin(),::tolower);
 
-		vect.push_back(word); //Vecteur 1 avec tous les mots
-
         hashmap[word]++;
-        
-
 	}
 	input.close();
 
+    // for(auto &e : hashmap){
+    //     hashmap2->first = hashmap[e]->second;
+    //     hashmap2->second->push_front(hashmap[e]->first);
+    // }
 
 	cout << "Finished Parsing War and Peace" << endl;
 
