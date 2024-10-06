@@ -2,6 +2,9 @@
 #include <cstddef>
 #include <forward_list>
 #include <vector>
+#include <iterator>
+
+
 
 namespace pr{
 
@@ -9,6 +12,7 @@ template <typename K, typename V>
 
 class Hashmap{
     public:
+    //ENTRY CLASS
     class Entry{
         public:
         const K key;
@@ -19,9 +23,7 @@ class Hashmap{
        typedef std::vector<std::forward_list<Entry>>buckets_t;
        buckets_t buckets;
        size_t size;
-       std::forward_list<Entry> iterend = buckets.end();
-       std::forward_list<Entry> vit = this->buckets;
-       Entry lit = this->buckets->Entry;
+
     public:
         Hashmap(size_t size = 21000):buckets(size),size(1){}
 
@@ -61,6 +63,44 @@ class Hashmap{
         buckets_t getbuckets() const{
             return buckets;
         }
-        
+        // ITERATOR CLASS
+        class iterator{
+            public:
+            //Ajouter pour que les iterators fonctionnent
+            using iterator_category = std::forward_iterator_tag;
+            using difference_traits = std::ptrdiff_t;
+            using value_type = Entry;
+            using pointer_type = Entry*;
+            using reference_type = Entry&;
+            
+            private:
+            // typedef std::vector<std::forward_list<Entry>>buckets_t;
+            typename buckets_t::iterator iterend;
+            typename buckets_t::iterator vit;
+            typename std::forward_list<Entry>::iterator lit;
+
+            public:
+            //ctor
+            iterator(typename buckets_t::iterator vit,typename buckets_t::iterator iterend): vit(vit), iterend(iterend){
+                lit = vit.begin();
+            }
+            //ctor par defaut
+            iterator(): vit(), iterend(), lit(){}
+            
+            iterator & operator++(){
+                lit++;
+                while(vit != iterend && lit ){
+
+                    if(lit == nullptr ){
+                        if(vit != nullptr){
+                            lit = vit;
+                            return *this;
+                        }
+                    }
+                    
+                }
+                return *this;
+            }
+        };
     };
 }
