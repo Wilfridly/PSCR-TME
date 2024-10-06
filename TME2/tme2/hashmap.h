@@ -63,18 +63,19 @@ class Hashmap{
         buckets_t getbuckets() const{
             return buckets;
         }
+
+
         // ITERATOR CLASS
         class iterator{
             public:
             //Ajouter pour que les iterators fonctionnent
             using iterator_category = std::forward_iterator_tag;
-            using difference_traits = std::ptrdiff_t;
+            using difference_type = std::ptrdiff_t;
             using value_type = Entry;
             using pointer_type = Entry*;
             using reference_type = Entry&;
             
             private:
-            // typedef std::vector<std::forward_list<Entry>>buckets_t;
             typename buckets_t::iterator iterend;
             typename buckets_t::iterator vit;
             typename std::forward_list<Entry>::iterator lit;
@@ -82,25 +83,54 @@ class Hashmap{
             public:
             //ctor
             iterator(typename buckets_t::iterator vit,typename buckets_t::iterator iterend): vit(vit), iterend(iterend){
-                lit = vit.begin();
+                if(vit != iterend){
+                    lit = vit->begin();
+                    while(vit != iterend && lit == vit->end()){
+                        ++vit;
+                        if(vit != iterend){
+                            lit = vit->begin();
+                        }
+                    }
+                }
             }
             //ctor par defaut
             iterator(): vit(), iterend(), lit(){}
-            
-            iterator & operator++(){
-                lit++;
-                while(vit != iterend && lit ){
 
-                    if(lit == nullptr ){
-                        if(vit != nullptr){
-                            lit = vit;
-                            return *this;
-                        }
+            reference_type operator*()const {
+                return *lit;
+            }
+
+            // Fonctions à coder
+            iterator & operator++(){
+                ++lit;
+                while(vit != iterend && lit == vit->end()){
+                    ++vit;
+                    if(vit != iterend){
+                        lit = vit->begin();
                     }
-                    
                 }
                 return *this;
             }
+
+            bool operator!=(const iterator &others){
+                return vit != others.vit || (vit != iterend && lit != others.lit); 
+            }
+
+            pointer_type operator->(){
+                return &(*lit);
+            }
+            // bool operator==(){
+
+            // }
+
+
         };
+        iterator begin(){
+            return iterator(buckets.begin(), buckets.end());
+        }
+
+        iterator end(){
+            return iterator(buckets.end(), buckets.end());
+        }
     };
 }

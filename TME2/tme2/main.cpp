@@ -3,8 +3,8 @@
 #include <regex>
 #include <chrono>
 #include <vector>
-#include "hashmap.h"
 #include <cstdio>
+#include "hashmap.h"
 
 template <typename iterator>
 size_t countp(iterator begin, iterator end){
@@ -107,27 +107,41 @@ int main () {
 	int *b = hashmap.get("peace");
 	int *c = hashmap.get("toto");
 	
-	if((!c)){
-		cout << "Le nombre d'occurence de toto est 0" << endl;
+	// if((!c)){
+	// 	cout << "Le nombre d'occurence de toto est 0" << endl;
 
-	}
-	cout << "Le nombre d'occurence de peace est " << *b << endl;
-	cout << "Le nombre d'occurence de war est " << *a << endl;
+	// }
+	// cout << "Le nombre d'occurence de peace est " << *b << endl;
+	// cout << "Le nombre d'occurence de war est " << *a << endl;
 
 	std::vector<pair<std::string,int>> hashmapcopie; //(hashmap.getbuckets() , hashmap.getbuckets().end());
+	std::vector<pair<std::string,int>> hashmapcopie2; //(hashmap.getbuckets() , hashmap.getbuckets().end());
 	
-	for(auto &bucket: hashmap.getbuckets()){
+	
+	for(auto &bucket: hashmap.getbuckets()){ //Première copie 
 		for(auto &entry: bucket){
 			hashmapcopie.push_back({entry.key,entry.value});
 		}
 	}
 	
-	sort(hashmapcopie.begin(),hashmapcopie.end(),[](pair<std::string,int> &a,pair<std::string,int> &b){ return a.second > b.second;});
+	// sort(hashmapcopie.begin(),hashmapcopie.end(),[](pair<std::string,int> &a,pair<std::string,int> &b){ return a.second > b.second;});
+	// int equal10 = 0;
+	// for (auto it = hashmapcopie.begin(); (it < hashmapcopie.end() && equal10 < 100); ++it) {
+	// 	std::cout << it->first << ":" << it->second << endl;
+	// 	++equal10;
+	// }
+
+    for (auto it = hashmap.begin(); it != hashmap.end(); ++it) {
+        hashmapcopie2.push_back({it->key, it->value}); // Utilisation de l'opérateur -> pour accéder à key et value
+    }
+
+	sort(hashmapcopie2.begin(),hashmapcopie2.end(),[](pair<std::string,int> &a,pair<std::string,int> &b){ return a.second > b.second;});
 	int equal10 = 0;
-	for (auto it = hashmapcopie.begin(); (it < hashmapcopie.end() && equal10 < 100); ++it) {
+	for (auto it = hashmapcopie2.begin(); (it < hashmapcopie2.end() && equal10 < 10); ++it) {
 		std::cout << it->first << ":" << it->second << endl;
 		++equal10;
 	}
+
 	std::string mote = "war";
 	size_t compteur = countp(vect.begin() , vect.end());
 	cout << compteur << endl;
