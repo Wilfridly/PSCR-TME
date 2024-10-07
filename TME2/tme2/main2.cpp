@@ -59,10 +59,6 @@ int main () {
 
     for(auto it = hashmap.begin(); it != hashmap.end(); it++) {
 		hashmap2[it->second].push_front(it->first);
-		// hashmap2[it->second,hashmap2->second.push_back(it->first)];
-		// hashmap2.insert(it->second,hashmap2.second.push_front(it->first));
-        // hashmap2->first = hashmap[e]->second;
-		// hashmap2.insert_or_assign(it->second,it->first);
     }
 
 	cout << "Finished Parsing War and Peace" << endl;
