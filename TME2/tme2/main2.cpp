@@ -57,10 +57,13 @@ int main () {
 	}
 	input.close();
 
-    // for(auto &e : hashmap){
-    //     hashmap2->first = hashmap[e]->second;
-    //     hashmap2->second->push_front(hashmap[e]->first);
-    // }
+    for(auto it = hashmap.begin(); it != hashmap.end(); it++) {
+		hashmap2[it->second].push_front(it->first);
+		// hashmap2[it->second,hashmap2->second.push_back(it->first)];
+		// hashmap2.insert(it->second,hashmap2.second.push_front(it->first));
+        // hashmap2->first = hashmap[e]->second;
+		// hashmap2.insert_or_assign(it->second,it->first);
+    }
 
 	cout << "Finished Parsing War and Peace" << endl;
 
@@ -72,11 +75,13 @@ int main () {
     cout << "Found a total of " << nombre_lu << " words." << endl;
 	cout << "Vecteur size : " << count << endl;
 
-    // for(auto &p : hashmap){
-    //     std::cout << p.first << " => " << p.second << std::endl;
-    // }
+    for(auto &p : hashmap2){
+		for(auto &f : p.second)
+		if(p.first == 100)
+        	std::cout << p.first << " => " << f << std::endl;
+    }
 
-    cout << hashmap.find("war")->second << endl;    
+    // cout << hashmap.find("war")->second << endl;    
     
     return 0;
 }
