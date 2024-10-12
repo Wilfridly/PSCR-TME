@@ -1,0 +1,14 @@
+2) Non, des data races peuvent avoir lieu :
+
+0           1             2
+10          10            10  
+8 --------> 12 <--------- 7
+On perd 3 euros car la valeur a été écrit par dessus.
+
+5) Il y a un deadlock, 2 threads accèdent au même lock en même temps.
+
+6) On règle les problèmes de verrou qui sont pris 2 fois d'affilés par une même personne avec le recursif mutex. 
+Les problèmes de deadlock ne sont pas encore réglés. Pour régler le problème de deadlock on utilise lock qui set les priorités des locks et seront
+fait par la suite toujours dans le même ordre. 
+
+7) 

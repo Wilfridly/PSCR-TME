@@ -9,6 +9,12 @@ namespace pr {
 void Banque::transfert(size_t deb, size_t cred, unsigned int val) {
 	Compte & debiteur = comptes[deb];
 	Compte & crediteur = comptes[cred];
+
+	unique_lock<recursive_mutex> g{crediteur.getMutex() , std::defer_lock};
+	unique_lock<recursive_mutex> m{debiteur.getMutex() , std::defer_lock};
+	
+	lock(g,m);
+
 	if (debiteur.debiter(val)) {
 		crediteur.crediter(val);
 	}

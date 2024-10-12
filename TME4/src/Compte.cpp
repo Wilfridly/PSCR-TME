@@ -4,11 +4,11 @@ using namespace std;
 
 namespace pr {
 void Compte::crediter (unsigned int val) {
-	unique_lock<mutex> g(m);
+	unique_lock<recursive_mutex> g(m2);
 	solde+=val ;
 }
 bool Compte::debiter (unsigned int val) {
-	unique_lock<mutex> g(m);
+	unique_lock<recursive_mutex> g(m2);
 	bool doit = solde >= val;
 	if (doit) {
 		solde-=val ;
@@ -25,5 +25,11 @@ Compte::Compte(const Compte & other) {
 	solde = other.solde;
 	other.m.unlock();
 }
+
+recursive_mutex & Compte::getMutex(){
+	return m2;
+}
+
+
 
 }
