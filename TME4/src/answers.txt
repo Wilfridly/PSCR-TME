@@ -11,4 +11,4 @@ On perd 3 euros car la valeur a été écrit par dessus.
 Les problèmes de deadlock ne sont pas encore réglés. Pour régler le problème de deadlock on utilise lock qui set les priorités des locks et seront
 fait par la suite toujours dans le même ordre. 
 
-7) 
+7) Non car si comptabiliser s'exécute avant que le créditeur ou le débiteur n'agissent, cela va afficher la mauvaise valeur. 

@@ -23,6 +23,7 @@ size_t Banque::size() const {
 	return comptes.size();
 }
 bool Banque::comptabiliser (int attendu) const {
+	unique_lock<mutex> l(m);
 	int bilan = 0;
 	int id = 0;
 	for (const auto & compte : comptes) {

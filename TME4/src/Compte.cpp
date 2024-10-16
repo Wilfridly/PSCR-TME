@@ -26,10 +26,9 @@ Compte::Compte(const Compte & other) {
 	other.m.unlock();
 }
 
-recursive_mutex & Compte::getMutex(){
+recursive_mutex & Compte::getMutex() const {
 	return m2;
 }
-
 
 
 }
