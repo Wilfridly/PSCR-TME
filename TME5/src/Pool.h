@@ -28,7 +28,7 @@ public:
 		queue.setBlocking(true);
 		threads.reserve(nbthread);
 		for(int i=0; i<nbthread; i++){
-			threads.emplace_back(pullWorker,&queue);
+			threads.emplace_back(pullWorker,std::ref(queue));
 		}
 	}
 

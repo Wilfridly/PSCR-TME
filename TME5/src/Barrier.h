@@ -19,7 +19,7 @@ public:
         }
     }
     
-    void waitor(){
+    void waitFor(){
         std::unique_lock<std::mutex> lg(m);
         while(counter != N){
             cv.wait(lg);

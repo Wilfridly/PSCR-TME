@@ -9,44 +9,6 @@
 using namespace std;
 using namespace pr;
 
-void fillScene(Scene & scene, default_random_engine & re) {
-	// Nombre de spheres (rend le probleme plus dur)
-	const int NBSPHERES = 250;
-
-	// on remplit la scene de spheres colorees de taille position et couleur aleatoire
-	uniform_int_distribution<int> distrib(0, 200);
-	uniform_real_distribution<double> distribd(-200, 200);
-	for (int i = 0; i < NBSPHERES; i++) {
-		// position autour de l'angle de la camera
-		// rayon entre 3 et 33, couleur aleatoire
-		// distrib(re) rend un entier aleatoire extrait de re
-		scene.add(Sphere({50+distribd(re),50 + distribd(re),120 + distribd(re) }, double(distrib(re)%30) + 3.0, Color::random()));
-	}
-	// quelques spheres de plus pour ajouter du gout a la scene
-	scene.add(Sphere({50,50,40},15.0,Color::red));
-	scene.add(Sphere({100,20,50},55.0,Color::blue));
-
-}
-
-// return the index of the closest object in the scene that intersects "ray"
-// or -1 if the ray does not intersect any object.
-int findClosestInter(const Scene & scene, const Rayon & ray) {
-	auto minz = std::numeric_limits<float>::max();
-	int targetSphere = -1;
-	int index = 0;
-	for (const auto & obj : scene) {
-		// rend la distance de l'objet a la camera
-		auto zinter = obj.intersects(ray);
-		// si intersection plus proche  ?
-		if (zinter < minz) {
-			minz = zinter;
-			targetSphere = index;
-		}
-		index++;
-	}
-	return targetSphere;
-}
-
 // Calcule l'angle d'incidence du rayon à la sphere, cumule l'éclairage des lumières
 // En déduit la couleur d'un pixel de l'écran.
 Color computeColor(const Sphere & obj, const Rayon & ray, const Vec3D & camera, std::vector<Vec3D> & lights) {
@@ -77,23 +39,23 @@ Color computeColor(const Sphere & obj, const Rayon & ray, const Vec3D & camera, 
 	return finalcolor;
 }
 
-// produit une image dans path, représentant les pixels.
-void exportImage(const char * path, size_t width, size_t height, Color * pixels) {
-	// ppm est un format ultra basique
-	ofstream img (path);
-	// P3 signifie : les pixels un par un en ascii
-	img << "P3" << endl; // ascii format, colors
-	// largeur hauteur valeur max d'une couleur (=255 un char)
-	img << width  << "\n"<< height << "\n" << "255" << endl;
-	// tous les pixels au format RGB
-	for (size_t  y = 0 ; y < height ; y++) {
-		for (size_t x =0 ; x < width ; x++) {
-			Color & pixel = pixels[x*height + y];
-			img << pixel << '\n';
+// return the index of the closest object in the scene that intersects "ray"
+// or -1 if the ray does not intersect any object.
+int findClosestInter(const Scene & scene, const Rayon & ray) {
+	auto minz = std::numeric_limits<float>::max();
+	int targetSphere = -1;
+	int index = 0;
+	for (const auto & obj : scene) {
+		// rend la distance de l'objet a la camera
+		auto zinter = obj.intersects(ray);
+		// si intersection plus proche  ?
+		if (zinter < minz) {
+			minz = zinter;
+			targetSphere = index;
 		}
+		index++;
 	}
-	// oui ca fait un gros fichier :D
-	img.close();
+	return targetSphere;
 }
 
 namespace pr {
@@ -130,14 +92,21 @@ public:
 // };
 
 class ConcretJob : public Job{
-	ConcretJob(int arg, Scene scene, vector<Vec3D> lights);
-	
-	void run(){
+	// Scene::screen_t screen;
+	Scene scene;
+	vector<Vec3D> lights;
+	int x,y;
+	public:
+	ConcretJob(Scene scene, vector<Vec3D> lights, int x, int y):
+	scene(scene), lights(lights), x(x), y(y){}
+	~ConcretJob(){}
 
-	for (int x =0 ; x < scene.getWidth() ; x++) {
-		for (int  y = 0 ; y < scene.getHeight() ; y++) {
+	void run(){
+		Color * pixels = new Color[scene.getWidth() * scene.getHeight()];
+		// for (int x = 0 ; x < scene.getWidth(); x++) {
+		// 	for (int  y = 0 ; y < scene.getHeight(); y++) {
 		// le point de l'ecran par lequel passe ce rayon
-		auto & screenPoint = screen[y][x];
+		auto & screenPoint = scene.getScreenPoints()[y][x];
 		// le rayon a inspecter
 		Rayon  ray(scene.getCameraPos(), screenPoint);
 
@@ -145,8 +114,8 @@ class ConcretJob : public Job{
 
 		if (targetSphere == -1) {
 			// keep background color
-			continue ;
-		} else {
+		} 
+		else {
 			const Sphere & obj = *(scene.begin() + targetSphere);
 			// pixel prend la couleur de l'objet
 			Color finalcolor = computeColor(obj, ray, scene.getCameraPos(), lights);
@@ -155,10 +124,9 @@ class ConcretJob : public Job{
 			// mettre a jour la couleur du pixel dans l'image finale.
 			pixel = finalcolor;
 		}
+		// 	}
+		// }
 	}
 
-	}
 };
-
-}
 }

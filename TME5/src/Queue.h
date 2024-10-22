@@ -2,6 +2,7 @@
 #define SRC_QUEUE_H_
 
 #include <cstdlib>
+#include <cstring>
 #include <mutex>
 #include <condition_variable>
 
@@ -29,7 +30,7 @@ class Queue {
 public:
 	Queue(size_t size) :allocsize(size), begin(0), sz(0) {
 		tab = new T*[size];
-		memset(tab, 0, size * sizeof(T*));
+		std::memset(tab, 0, size * sizeof(T*));
 	}
 	size_t size() const {
 		std::unique_lock<std::mutex> lg(m);
@@ -71,8 +72,8 @@ public:
 	void setBlocking(bool isBlocking){
 		std::unique_lock<std::mutex>lg(m);
 		this->isBlocking = isBlocking;
-		cv_cons.notify_all(lg(m));
-		cv_prod.notify_all(lg(m));
+		cv_cons.notify_all();
+		cv_prod.notify_all();
 	}
 };
 
