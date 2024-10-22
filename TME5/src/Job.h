@@ -130,9 +130,10 @@ public:
 // };
 
 class ConcretJob : public Job{
-	ConcretJob(int arg, Scene &scene, vector<Vec3D> lights);
+	ConcretJob(int arg, Scene scene, vector<Vec3D> lights);
 	
 	void run(){
+
 	for (int x =0 ; x < scene.getWidth() ; x++) {
 		for (int  y = 0 ; y < scene.getHeight() ; y++) {
 		// le point de l'ecran par lequel passe ce rayon
