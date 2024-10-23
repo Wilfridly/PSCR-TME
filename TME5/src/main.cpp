@@ -112,25 +112,21 @@ int main () {
 	// const int NBJOB = 20;
 
 	// vector<int> results(20);
-	Pool pool(1);
+	Pool pool(15);
 
-	pool.start(1);
+	pool.start(5);
 	Barrier b(scene.getWidth()*scene.getHeight());
 
-
-	int c = 0;
 	for (int x = 0 ; x < scene.getWidth(); x++) {
 		for (int  y = 0 ; y < scene.getHeight(); y++) {
-   			pool.submit(new ConcretJob(scene, lights, x, y));
+			cout << x << " " << y << "\r";
+   			pool.submit(new ConcretJob(&scene, &lights, x, y, &b, &pixels[y*scene.getHeight() + x]));
 		}
-		c++;
-
 	}
 
-	// b.done();
-	cout << "Hello it's me Luigi " << c << endl;
+	cout << "Hello it's me Luigi "  << endl;
 	b.waitFor();
-	cout << "Hello it's me Mario " << c << endl;
+	cout << "Hello it's me Mario " << endl;
 	pool.stop();
 
 	std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
@@ -139,6 +135,6 @@ int main () {
 	              << "ms.\n";
 
 	exportImage("toto.ppm",scene.getWidth(), scene.getHeight() , pixels);
-
+	cout << "Hello it's me Mario " << endl;
 	return 0;
 }

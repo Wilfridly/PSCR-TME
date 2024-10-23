@@ -39,9 +39,15 @@ public:
 
 	T* pop() {
 		std::unique_lock<std::mutex> lg(m);
+		
 		while (empty() && isBlocking) {
 			cv_cons.wait(lg);
 		}
+
+		if(!(isBlocking)){
+			return nullptr;
+		}
+
 		auto ret = tab[begin];
 		tab[begin] = nullptr;
 		sz--;
@@ -54,6 +60,9 @@ public:
 		std::unique_lock<std::mutex> lg(m);
 		while (full() && isBlocking) {
 			cv_prod.wait(lg);
+		}
+		if(!isBlocking){
+			return false;
 		}
 		tab[(begin + sz) % allocsize] = elt;
 		sz++;

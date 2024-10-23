@@ -40,6 +40,7 @@ public:
 		for(auto &t : threads){
 			t.join();
 		}
+		threads.clear();
 	}
 
 	~Pool(){

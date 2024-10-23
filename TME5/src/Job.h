@@ -3,6 +3,7 @@
 #include <chrono>
 #include <iostream>
 #include <thread>
+#include "Barrier.h"
 #include "Scene.h"
 
 
@@ -93,37 +94,41 @@ public:
 
 class ConcretJob : public Job{
 	// Scene::screen_t screen;
-	Scene scene;
-	vector<Vec3D> lights;
+	Scene *scene;
+	vector<Vec3D> * lights;
 	int x,y;
+	Barrier *b;
+	Color * retpixel;
+
 	public:
-	ConcretJob(Scene scene, vector<Vec3D> lights, int x, int y):
-	scene(scene), lights(lights), x(x), y(y){}
+	ConcretJob(Scene *scene, vector<Vec3D> *lights, int x, int y, Barrier *b, Color *retpixel):
+	scene(scene), lights(lights), x(x), y(y), b(b), retpixel(retpixel){}
 	~ConcretJob(){}
 
 	void run(){
-		Color * pixels = new Color[scene.getWidth() * scene.getHeight()];
 		// for (int x = 0 ; x < scene.getWidth(); x++) {
 		// 	for (int  y = 0 ; y < scene.getHeight(); y++) {
 		// le point de l'ecran par lequel passe ce rayon
-		auto & screenPoint = scene.getScreenPoints()[y][x];
+		auto & screenPoint = scene->getScreenPoints()[y][x];
 		// le rayon a inspecter
-		Rayon  ray(scene.getCameraPos(), screenPoint);
+		Rayon  ray(scene->getCameraPos(), screenPoint);
 
-		int targetSphere = findClosestInter(scene, ray);
+		int targetSphere = findClosestInter(*scene, ray);
 
 		if (targetSphere == -1) {
 			// keep background color
 		} 
 		else {
-			const Sphere & obj = *(scene.begin() + targetSphere);
+			const Sphere & obj = *(scene->begin() + targetSphere);
 			// pixel prend la couleur de l'objet
-			Color finalcolor = computeColor(obj, ray, scene.getCameraPos(), lights);
+			*retpixel = computeColor(obj, ray, scene->getCameraPos(), *lights);
 			// le point de l'image (pixel) dont on vient de calculer la couleur
-			Color & pixel = pixels[y*scene.getHeight() + x];
-			// mettre a jour la couleur du pixel dans l'image finale.
-			pixel = finalcolor;
+			// Color & pixel = pixels[y*scene.getHeight() + x];
+			// // mettre a jour la couleur du pixel dans l'image finale.
+			// pixel = finalcolor;
 		}
+		b->done();
+
 		// 	}
 		// }
 	}
