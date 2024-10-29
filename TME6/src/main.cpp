@@ -11,13 +11,13 @@ void attaque (pid_t adversaire){
     sigfillset(&mask);
     sigdelset(&mask, SIGINT);
 
-    signal(SIGINT,[](){life--;});
+    // signal(SIGINT,[](){life--;});
 
 }
 
 void defense (){
     //
-    randsleep()
+    randsleep();
 }
 
 void combat (pid_t adversaire){
