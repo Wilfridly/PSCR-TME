@@ -21,7 +21,7 @@ void defense (){
 void combat (pid_t adversaire){
     while(true){
         defense();
-        
+
         attaque(adversaire);
     }
 }
@@ -31,7 +31,7 @@ int main(){ //
     int life = 3;
 
     if(fork() == 0){ //Luke
-
+        
     }else{ // Vador
 
     }
