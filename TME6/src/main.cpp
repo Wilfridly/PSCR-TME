@@ -4,12 +4,14 @@
 #include <csignal>
 #include "rsleep.h"
 
+int life = 3;
+
 void attaque (pid_t adversaire){
     sigset_t mask;
     sigfillset(&mask);
     sigdelset(&mask, SIGINT);
 
-    signal(SIGINT,[](int ){sig--;});
+    signal(SIGINT,[](){life--;});
 
 }
 
@@ -28,11 +30,15 @@ void combat (pid_t adversaire){
 
 
 int main(){ //
-    int life = 3;
+    
+    int vador = getpid();
+    int luke = fork();
 
-    if(fork() == 0){ //Luke
-        
-    }else{ // Vador
-
+    if(luke == 0){ //Luke
+        combat(vador);        
+    } else{ // Vador
+        combat(luke);
     }
+
+    return 0;
 }
