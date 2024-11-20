@@ -1,46 +1,60 @@
 #include <unistd.h>
 #include <sys/wait.h>
 #include <iostream>
+#include <cstring>
 
 int main(int argc, char** argv){
     
-    int pipe[2];
-    int i;
+    char* arg1[argc];
+    char* arg2[argc];
+
+    std::memset(arg1, 0, argc*sizeof(char*));
+    std::memset(arg2, 0, argc*sizeof(char*));
+
+    int i = 0;
 
     
-    for(i = 0; i < argc; i++){
-        if(argv[i] == "|"){
+    // for(i = 1; i < argc; i++){
+    //     if(argv[i] == "|"){
+    //         break;
+    //     }
+    //     arg1[i-1] = argv[i];
+    // }
+    for(i = 1; i < argc; i++){
+        if(strcmp(argv[i],"|") == 0) 
             break;
-        }
+        arg1[i-1] = argv[i];
     }
 
-    char* arg1[i+1];
-    char* arg2[argc - i +1];
-    i++;
+    for(int j = i + 1; j < argc; j++){
+        arg2[j-i-1] = argv[j];
+    } 
 
-    for(int j = 0 ; j < i; j++, i++){
-        arg1[j]= argv[i];
+    int pi[2];
+
+    pipe(pi);
+
+    for(int j = 0; j < argc; j++){
+        std::cout << arg1[j] << " "<< arg2[j] << " : " << std::endl; 
+
     }
 
-    
-    for(int j = 0 ; i < argc; j++){
-        arg2[j]= argv[i];
-    }
-
-    std::cout << arg1 << " : " << std::endl;
     if(fork() == 0){ // fils
-        dup2(pipe[1],STDOUT_FILENO);
-        close(pipe[0]); close(pipe[1]);
+        dup2(pi[1],STDOUT_FILENO);
+        close(pi[1]); close(pi[0]);
         execv (arg1[0], arg1);
+        perror(" ERROR EXEC");
     }
     else if(fork() == 0){
-        dup2(pipe[0],STDIN_FILENO);
-        close(pipe[0]); close(pipe[1]);
+        dup2(pi[0],STDIN_FILENO);
+        close(pi[1]); close(pi[0]);
         execv (arg2[0],arg2);
+        perror(" ERROR EXEC");
+
     }else{
-        close(pipe[0]); close(pipe[1]);
+        close(pi[1]); close(pi[0]);
         wait(nullptr);
         wait(nullptr);
     }
-
+    return (EXIT_SUCCESS);
 }
