@@ -11,6 +11,9 @@
 using namespace std;
 using namespace pr;
 
+#define N 10
+#define M 10
+
 void producteur (Stack<char> * stack) {
 	char c ;
 	while (cin.get(c)) {
@@ -38,6 +41,7 @@ int main () {
 	void *addr;
 
 	bool useAnonymous = false;
+	
 	if(useAnonymous){
 		addr == mmap(nullptr,shmsize, PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
 		if(addr == MAP_FAILED){
@@ -61,17 +65,21 @@ int main () {
 		}
 	}
 
-	Stack<char> * s = new Stack<char>();
+	Stack<char> * s = new (addr) Stack<char>();
 
 	pid_t pp = fork();
 	if (pp==0) {
-		producteur(s);
+		for(int i = 0; i < N ;i++){
+			producteur(s);
+		}
 		return 0;
 	}
 
 	pid_t pc = fork();
 	if (pc==0) {
-		consomateur(s);
+		for(int i = 0; i < M ; i++){
+			consomateur(s);
+		}
 		return 0;
 	}
 	else{
