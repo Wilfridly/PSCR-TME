@@ -2,6 +2,7 @@
 #define SRC_SERVERSOCKET_H_
 
 #include "Socket.h"
+#include "ServerSocket.h"
 
 namespace pr {
 
